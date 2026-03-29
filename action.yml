@@ -36,7 +36,8 @@ runs:
       run: |
         set -e # 遇到错误时退出
         echo "🔨 开始编译项目: ${{ inputs.binary_name }}"
-        export GOPROXY=https://goproxy.cn,direct
+        go env -w GO111MODULE=on
+        go env -w GOPROXY=https://goproxy.cn,direct
         
         # 定义目标平台
         PLATFORMS="linux/amd64 linux/arm64 windows/amd64 darwin/amd64 darwin/arm64"
@@ -61,7 +62,7 @@ runs:
           GOOS=$GOOS GOARCH=$GOARCH go build -o ../$OUTPUT_FILE .
           cd - > /dev/null
         done
-        
+
         ls -al build_output/ # 列出编译结果
 
     # 步骤 3: 上传到 Release
