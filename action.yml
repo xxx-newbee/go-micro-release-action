@@ -68,6 +68,6 @@ runs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: build_output/* # 上传编译好的所有文件
+        files: ../build_output/* # 上传编译好的所有文件
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
