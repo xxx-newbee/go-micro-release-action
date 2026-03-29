@@ -34,10 +34,12 @@ runs:
     - name: Build Binaries
       shell: bash # 指定使用 bash
       run: |
-        set -e
+        set -e # 遇到错误时退出
         echo "🔨 开始编译项目: ${{ inputs.binary_name }}"
+
+        go env -w GOPROXY=https://goproxy.cn,direct
         
-        go mod download
+        go mod download # 下载依赖
         # 定义目标平台
         PLATFORMS="linux/amd64 linux/arm64 windows/amd64 darwin/amd64 darwin/arm64"
         
@@ -57,12 +59,10 @@ runs:
           
           echo "   -> 编译中: $GOOS/$GOARCH"
           # 进入指定目录编译
-          cd ${{ inputs.project_path }}
-          GOOS=$GOOS GOARCH=$GOARCH go build -o ../$OUTPUT_FILE .
-          cd - > /dev/null
+          GOOS=$GOOS GOARCH=$GOARCH go build -o ../$OUTPUT_FILE ${{ inputs.project_path }}
         done
 
-        ls -al build_output/ # 列出编译结果
+        ls -al ../build_output/ # 列出编译结果
 
     # 步骤 3: 上传到 Release
     - name: Release
