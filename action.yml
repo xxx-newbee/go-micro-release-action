@@ -1,6 +1,6 @@
-name: 'Release Action'
+name: 'Go Project Release Action'
 description: '一个自动编译 Go 项目并发布到 GitHub Release 的自定义工具'
-author: 'Your Name'
+author: 'xxx'
 
 # 定义输入参数，这样你在调用时可以自定义
 inputs:
@@ -34,7 +34,9 @@ runs:
     - name: Build Binaries
       shell: bash # 指定使用 bash
       run: |
+        set -e # 遇到错误时退出
         echo "🔨 开始编译项目: ${{ inputs.binary_name }}"
+        export GOPROXY=https://goproxy.cn,direct
         
         # 定义目标平台
         PLATFORMS="linux/amd64 linux/arm64 windows/amd64 darwin/amd64 darwin/arm64"
@@ -59,8 +61,11 @@ runs:
           GOOS=$GOOS GOARCH=$GOARCH go build -o ../$OUTPUT_FILE .
           cd - > /dev/null
         done
+    # 步骤 3: 列出编译好的文件，方便调试
+    - name: List Build Artifacts
+      run: ls -al build_output/ # 列出编译好的文件，方便调试
 
-    # 步骤 3: 上传到 Release
+    # 步骤 4: 上传到 Release
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
