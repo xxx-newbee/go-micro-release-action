@@ -34,12 +34,10 @@ runs:
     - name: Build Binaries
       shell: bash # 指定使用 bash
       run: |
-        set -e # 遇到错误时退出
+        set -e
         echo "🔨 开始编译项目: ${{ inputs.binary_name }}"
-
-        go env -w GOPROXY=https://goproxy.cn,direct
         
-        go mod download # 下载依赖
+        go mod download
         # 定义目标平台
         PLATFORMS="linux/amd64 linux/arm64 windows/amd64 darwin/amd64 darwin/arm64"
         
