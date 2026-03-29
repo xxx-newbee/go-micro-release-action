@@ -61,11 +61,10 @@ runs:
           GOOS=$GOOS GOARCH=$GOARCH go build -o ../$OUTPUT_FILE .
           cd - > /dev/null
         done
-    # 步骤 3: 列出编译好的文件，方便调试
-    - name: List Build Artifacts
-      run: ls -al build_output/ # 列出编译好的文件，方便调试
+        
+        ls -al build_output/ # 列出编译结果
 
-    # 步骤 4: 上传到 Release
+    # 步骤 3: 上传到 Release
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
